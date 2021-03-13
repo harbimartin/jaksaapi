@@ -29,11 +29,11 @@ class UsersController extends Controller
         if ($validate->fails()) {
             return response()->json([
                 'error_code' => 1,
-                'error_message' => 'You must be add all fields'
+                'error_message' => $validate->errors()->all()//'You must be add all fields'
             ]);
         }
 
-        $request['password_verified'] = Crypt::encrypt($request['password_verified']);
+        $request['password_verified'] = Crypt::encrypt($request['password']);
         $request['password'] = Hash::make($request['password']);
         $request['log'] = '0';
         $user = User::create($request->toArray());
@@ -66,7 +66,7 @@ class UsersController extends Controller
             ]);
         }
 
-        $user = User::where('name', $request->name)->first();
+        $user = Auth::user()::where('name', $request->name)->first();
         if ($user->log) {
             return response()->json([
                 'error_code' => 1,
@@ -89,10 +89,11 @@ class UsersController extends Controller
                 'error_message' => 'Your token not found !'
             ]);
         }
+        $user = User::with('getPerkaraRelation')->get();
         return response()->json([
             'error_code' => '0',
             'error_message' => '',
-            'data' => User::all()
+            'data' => $user
         ]);
     }
 
@@ -146,7 +147,9 @@ class UsersController extends Controller
     }
 
     public function me(){
-        return $this->responseSuccess(Auth::user());
+        $db = Auth::user();
+        // $user = Auth::user()::where('name', $db->name)->first();
+        return $this->responseSuccess($db);
     }
 
     public function delete()
@@ -191,3 +194,4 @@ class UsersController extends Controller
         ]);
     }
 }
+
