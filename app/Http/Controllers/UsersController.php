@@ -148,8 +148,8 @@ class UsersController extends Controller
 
     public function me(){
         $db = Auth::user();
-        // $user = Auth::user()::where('name', $db->name)->first();
-        return $this->responseSuccess($db);
+        $user = User::where('name', $db->name)->first();
+        return $this->responseSuccess($user);
     }
 
     public function delete()
