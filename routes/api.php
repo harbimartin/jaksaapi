@@ -16,6 +16,6 @@ Route::group([
     Route::post('logout', [UsersController::class, 'logout']);
     Route::post('update', [UsersController::class, 'update']);
     Route::post('delete', [UsersController::class, 'delete']);
-    Route::post('add', [PerkaraController::class, 'add']);
+    Route::post('add', [PerkaraController::class, 'add']); // <-- yang ini error ga bisa ke get dari postman
     // Route::post('perkara/update', [PerkaraController::class, 'update']);
 });
